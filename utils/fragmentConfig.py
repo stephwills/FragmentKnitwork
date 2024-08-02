@@ -1,0 +1,13 @@
+CHECK_OVERLAP = True                # whether to check overlap between the fragments in a pair
+CHECK_DISTANCE = True               # whether to check the distance between the fragments in a pair
+FRAGMENT_OVERLAP = 0.56             # volume overlap threshold for fragments (proportion of volume of one fragment overlapping with another_
+FRAGMENT_DISTANCE = 5.0             # max distance threshold between fragments
+MIN_CARBONS = 3                     # minimum amount of carbons the substructure has to be contributing to the merge
+CARBONS_CHECK = True                # whether to check for the number of carbons
+SINGLE_MOL_CHECK = True             # whether to check the substructure in the merge is a single molecule ('i.e. no . in SMILES')
+SINGLE_CARBON_RING_CHECK = True     # whether to rule out substructures that represent a single carbon ring (queries will blow up for e.g. benzenes)
+SUBSTRUCTURE_OVERLAP_CHECK = True   # whether to check the volume overlap between substructures
+SUBSTRUCTURE_OVERLAP = 0.3          # the max amount of allowed volume overlap between substructures
+TERMINAL_SYNTHONS = True            # whether to check if the edge substructures used are terminal (i.e. not broken down any more)
+TERMINAL_SUBNODES = True            # whether to check if the node substructures used are terminal (i.e. not broken down any more)
+PROLIF_CHECK = True                 # whether to check if the substructures are responsible for making an interaction using PROLIF

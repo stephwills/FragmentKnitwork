@@ -1,0 +1,7 @@
+*pycache*
+**/__pycache__
+.idea/
+notebooks/
+archive/
+Dock/
+FragmentKnitwork/utils/processFragalysisFiles.py

@@ -1,0 +1,7 @@
+CC(=O)Nc1cccc2cc[nH]c12,Cn1cc(N)c(C(=O)NC2CCC2)n1
+CNC(=O)c1cn(C)c2ccccc12,Cn1cc(N)c(C(=O)NC2CCC2)n1
+Cc1ccc(NC(=O)C2CCCO2)nc1,CNC(=O)c1cn(C)c2ccccc12
+Cc1ccc(NC(=O)C2CCCO2)nc1,Cn1cc(N)c(C(=O)NC2CCC2)n1
+Cc1nn(C)c(C)c1NC(=O)CC#N,Cc1ccc(NC(=O)C2CCCO2)nc1
+Cc1nn(C)c(C)c1NC(=O)CC#N,Cn1cc(N)c(C(=O)NC2CCC2)n1
+Cn1cc(N)c(C(=O)NC2CCC2)n1,CNC(=O)c1cccc2cc[nH]c12
