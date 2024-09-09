@@ -195,7 +195,6 @@ def runKnitting(substructure_pair_file, n_parallel, target, working_dir, output_
                           prolif_working, n_parallel, os.path.join(prolif_output, f"{fragment_pair}_{descriptor}_impure_merge.json"),
                           max_prioritize)
             print('Prolif prioritization run')
-            shutil.rmtree(prolif_working)
 
         if r_group_search:
             print('R group expansion starting')
@@ -210,6 +209,7 @@ def runKnitting(substructure_pair_file, n_parallel, target, working_dir, output_
                                      os.path.join(r_group_dir, f"{fragment_pair}_{descriptor}_impure_merge.json"))
             print('R group expansion done')
 
+    shutil.rmtree(prolif_working)
     print('Files processed')
 
 
@@ -236,17 +236,20 @@ def main():
     parser.add_argument('--prolif_prioritization', action='store_true', help="whether to prioritize the substructures used for those that make an interactions")
     parser.add_argument('--target', required=False, default=None, help="name of the target (in fragalysis format)")
     parser.add_argument('--substructure_dir', required=False, default=None, help="location of the enumeration dir creater by runEnumeration.py")
-    parser.add_argument('--max_prioritize', required=False, default=None, help="if prioritizing, the max number of compounds to prioritize")
+    parser.add_argument('--max_prioritize', type=int, required=False, default=None, help="if prioritizing, the max number of compounds to prioritize")
     parser.add_argument('--r_group_search', required=False, default=None, help="whether you want to run an r group search on the compounds automatically using R groups from the original fragments")
     args = parser.parse_args()
 
     if not os.path.exists(args.working_dir):
         os.mkdir(args.working_dir)
 
-    if not args.substructure_file:
+    if not os.path.exists(args.output_dir):
+        os.mkdir(args.output_dir)
+
+    if not args.substructure_pair_file:
         substructure_file = os.path.join(args.substructure_dir, 'substructure_pairs.json')
     else:
-        substructure_file = args.substructure_file
+        substructure_file = args.substructure_pair_file
 
     # if r group expansions are being run
     r_group_data_file = None  # created by runEnumeration.py (if flag is on)
