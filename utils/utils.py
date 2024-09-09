@@ -24,11 +24,17 @@ def dump_json(data, fname):
         json.dump(data, f)
 
 
-def get_smiles(target, fragment, fragalysis_dir=config.FRAGALYSIS_DATA_DIR):
-    dir = os.path.join(fragalysis_dir, target, "aligned")
-    fname_part = f"{target}-{fragment}"  # the first part of the filenames/folder names
-    path = os.path.join(dir, fname_part)
-    smiles_path = os.path.join(path, f"{fname_part}_smiles.txt")
+def get_smiles(target, fragment, fragalysis_dir=config.FRAGALYSIS_DATA_DIR, fragalysis_version=config.FRAGALYSIS_VERSION):
+    if fragalysis_version == 'v1':  # fpath format changed with new version of fragalysis download
+        dir = os.path.join(fragalysis_dir, target, "aligned")
+        fname_part = f"{target}-{fragment}"  # the first part of the filenames/folder names
+        path = os.path.join(dir, fname_part)
+        smiles_path = os.path.join(path, f"{fname_part}_smiles.txt")
+
+    if fragalysis_version == 'v2':
+        dir = os.path.join(fragalysis_dir, target, "aligned_files")
+        path = os.path.join(dir, fragment)
+        smiles_path = os.path.join(path, f"{fragment}_ligand.smi")
 
     try:
         with open(smiles_path) as smiles_file:  # open the file to get smiles
@@ -41,17 +47,23 @@ def get_smiles(target, fragment, fragalysis_dir=config.FRAGALYSIS_DATA_DIR):
     # smiles does not necessarily match what is in the network
     # get canonical smiles by converting to mol and converting back to smiles
     mol = Chem.MolFromSmiles(smiles)
+    Chem.RemoveStereochemistry(mol)
     smiles = Chem.MolToSmiles(mol)
+
     return smiles
 
 
-def get_mol(
-    target, fragment, return_mol=False, fragalysis_dir=config.FRAGALYSIS_DATA_DIR
-):
-    dir = os.path.join(fragalysis_dir, target, "aligned")
-    fname_part = f"{target}-{fragment}"  # the first part of the filenames/folder names
-    path = os.path.join(dir, fname_part)
-    mol_path = os.path.join(path, f"{fname_part}.mol")
+def get_mol(target, fragment, return_mol=False, fragalysis_dir=config.FRAGALYSIS_DATA_DIR,
+            fragalysis_version=config.FRAGALYSIS_VERSION):
+    if fragalysis_version == 'v1':
+        dir = os.path.join(fragalysis_dir, target, "aligned")
+        fname_part = f"{target}-{fragment}"  # the first part of the filenames/folder names
+        path = os.path.join(dir, fname_part)
+        mol_path = os.path.join(path, f"{fname_part}.mol")
+    if fragalysis_version == 'v2':
+        dir = os.path.join(fragalysis_dir, target, "aligned_files")
+        path = os.path.join(dir, fragment)
+        mol_path = os.path.join(path, f"{fragment}_ligand.mol")
 
     if return_mol:
         try:
@@ -65,11 +77,14 @@ def get_mol(
         return mol_path
 
 
-def get_protein(
-    target, fragment, return_mol=False, fragalysis_dir=config.FRAGALYSIS_DATA_DIR, protonated=False, desolv=True
-):
-    dir = os.path.join(fragalysis_dir, target, "aligned")
-    fname_part = f"{target}-{fragment}"  # the first part of the filenames/folder names
+def get_protein(target, fragment, return_mol=False, fragalysis_dir=config.FRAGALYSIS_DATA_DIR, protonated=False,
+                desolv=True, fragalysis_version=config.FRAGALYSIS_VERSION):
+    if fragalysis_version == 'v1':
+        dir = os.path.join(fragalysis_dir, target, "aligned")
+        fname_part = f"{target}-{fragment}"  # the first part of the filenames/folder names
+    if fragalysis_version == 'v2':
+        dir = os.path.join(fragalysis_dir, target, "aligned_files")
+        fname_part = fragment  # the first part of the filenames/folder names
     if not protonated and desolv:
         protein_path = os.path.join(dir, fname_part, f"{fname_part}_apo-desolv.pdb")
     if protonated and desolv:
@@ -94,6 +109,7 @@ def get_protein(
 def get_bound_protein(
     target, fragment, return_mol=False, fragalysis_dir=config.FRAGALYSIS_DATA_DIR
 ):
+    # bound-desolv files only used in fragalysis format v1
     from pymol import cmd
     dir = os.path.join(fragalysis_dir, target, "aligned")
     fname_part = f"{target}-{fragment}"  # the first part of the filenames/folder names
