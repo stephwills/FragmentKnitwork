@@ -1,7 +1,6 @@
 import FragmentKnitwork.utils.fragmentConfig as config
 import numpy as np
 from FragmentKnitwork.utils.utils import get_distance
-from pymol import cmd
 from rdkit import Chem
 from rdkit.Chem import Mol, rdFMCS, rdShapeHelpers
 
@@ -190,6 +189,7 @@ def atom_coords_from_pymol(mol_file: str) -> dict:
     :param mol_file:
     :return: dictionary with "coords" and "IDs"
     """
+    from pymol import cmd
     coords = {"coords": [], "IDs": []}
     cmd.reinitialize()
     cmd.load(mol_file, "mol")
@@ -207,6 +207,7 @@ def atom_IDs_to_molfile(mol_file, output_file, IDs):
     :param IDs:
     :return:
     """
+    from pymol import cmd
     cmd.reinitialize()
     cmd.load(mol_file, "mol")
     ids_string = "id "

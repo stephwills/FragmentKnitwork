@@ -146,14 +146,21 @@ def get_bound_protein(
             print("Ensure files are saved correctly in Fragalysis format.")
 
 
+# def split_complex_file(holo_file, new_file):
+#     from pymol import cmd
+#     cmd.reinitialize()
+#     cmd.load(holo_file, 'complex')
+#     # cmd.select('lig', 'resn LIG')
+#     cmd.extract('hets', 'complex and HETATM')
+#     cmd.save(new_file, 'complex')
+#     return new_file
 def split_complex_file(holo_file, new_file):
-    from pymol import cmd
-    cmd.reinitialize()
-    cmd.load(holo_file, 'complex')
-    # cmd.select('lig', 'resn LIG')
-    cmd.extract('hets', 'complex and HETATM')
-    cmd.save(new_file, 'complex')
+    import MDAnalysis
+    u = MDAnalysis.Universe(holo_file)
+    receptor = u.select_atoms("protein")
+    receptor.write(new_file)
     return new_file
+
 
 def get_distance(coord1, coord2):
     """
