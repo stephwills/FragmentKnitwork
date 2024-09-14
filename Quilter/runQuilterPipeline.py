@@ -1,5 +1,6 @@
 
 from argparse import ArgumentParser
+import os
 
 from FragmentKnitwork.Quilter.quilterPipeline import Pipeline
 from FragmentKnitwork.Quilter.quilterWictorPipeline import WictorPipeline
@@ -29,6 +30,15 @@ def main():
     parser.add_argument('--move_files', action='store_true', default=config.MOVE_FILES, help='(recommended) whether to move files back to the output directory')
     parser.add_argument('--use_wictor', action='store_true', help='whether to use the wictor pre-filter (without minimization) then prioritize the top X')
     args = parser.parse_args()
+
+    if not os.path.exists(args.output_dir):
+        os.mkdir(args.output_dir)
+
+    if not os.path.exists(args.working_dir):
+        os.mkdir(args.working_dir)
+
+    if not os.path.exists(args.scoring_dir):
+        os.mkdir(args.scoring_dir)
 
     # read in input data
     file = args.json_file

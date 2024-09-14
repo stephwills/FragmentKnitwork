@@ -475,12 +475,12 @@ class WictorPipeline:
                                   'sucos': sucoses,
                                   'sucos_check': sucos_checks})
 
-        dump_json(self.scoring_data, os.path.join(self.scoring_dir, 'scored_data.json'))
+        dump_json(self.scoring_data, os.path.join(self.scoring_dir, f'{self.fragmentA}-{self.fragmentB}_scored_data.json'))
 
         passing_mols = order_by_lst(passing_mols, passing_sucoses)
         passing_dicts = order_by_lst(passing_dicts, passing_sucoses)
 
-        w = Chem.SDWriter(os.path.join(self.scoring_dir, 'ordered_mols.sdf'))
+        w = Chem.SDWriter(os.path.join(self.scoring_dir, f'{self.fragmentA}-{self.fragmentB}_ordered_mols.sdf'))
         for mol, passing_dict in zip(passing_mols, passing_dicts):
             new_mol = add_props_from_dict(mol, passing_dict)
             w.write(new_mol)

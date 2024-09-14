@@ -36,6 +36,8 @@ def add_data_from_fragmenstein_json(mol_data, minimised_json_file):
     data = load_json(minimised_json_file)
     G_bound = data["Energy"]["bound"]["total_score"]  # energy bound
     G_unbound = data["Energy"]["unbound"]["total_score"]  # unbound
+    # G_bound = data["Energy"]["ligand_ref2015"]["total_score"]  # energy bound
+    # G_unbound = data["Energy"]["unbound_ref2015"]["total_score"]  # unbound
     deltaG = G_bound - G_unbound  # calculate energy difference
     comRMSD = data["mRMSD"]  # RMSD between two fragments and merge
     mol_data['G_bound'] = G_bound
