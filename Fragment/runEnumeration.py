@@ -2,10 +2,11 @@ from argparse import ArgumentParser
 import os
 
 from FragmentKnitwork.Fragment.enumerate import enumeration
+from FragmentKnitwork.Fragment.ifpsForFragments import get_all_fragment_fps
 
 
 def runEnumeration(fragment_names, fragment_smiles, target, mol_files, pdb_files, output_dir, ignore_pairs=None,
-                   write_smiles_to_file=True, r_group_expansions=True, record_equiv_synthon=True):
+                   write_smiles_to_file=True, r_group_expansions=True, record_equiv_synthon=True, calc_ifps=None):
     """
 
     :param fragment_names:
@@ -58,6 +59,11 @@ def runEnumeration(fragment_names, fragment_smiles, target, mol_files, pdb_files
         equiv_json = os.path.join(output_dir, 'equivalent_subnodes.json')
         equivalent_synthon_subnodes(fragment_names, fragment_smiles, saveJson=equiv_json)
 
+    if calc_ifps:
+        # calculate interactions with prolif for fragments to use in scoring later
+        ifp_work_dir = os.path.join(output_dir, 'ifps')
+        get_all_fragment_fps(fragment_names, ifp_work_dir, output_dir, target)
+
 
 def main():
     parser = ArgumentParser()
@@ -68,6 +74,7 @@ def main():
     parser.add_argument('--write_smiles_to_file', action='store_true', help='write out SMILES pairs to a file ')
     parser.add_argument('--record_equiv_synthon', action='store_true', help='(recommended) record equivalent synthons/subnodes for fragments, used for some of the more complex queries')
     parser.add_argument('--r_group_expansions', action='store_true', help='(recommended) record possible r group expansions for future queries')
+    parser.add_argument('--calc_ifps', action='store_true', help='(recommended) calc interactions for scoring later')
     parser.add_argument('--pairs_to_ignore_json', default=None, help='pairs to not run enumeration before, provide in format (remember pairs are asymmetric) [["x0000_2A", "x000_1A"], ["x0000_1A", "x000_2A"]')
     parser.add_argument('--output_dir', help="where to save the output data")
     args = parser.parse_args()
@@ -104,7 +111,8 @@ def main():
         pairs_to_ignore=None
 
     runEnumeration(fragment_names, fragment_smiles, args.target, mol_files, pdb_files, args.output_dir, ignore_pairs=pairs_to_ignore,
-                   write_smiles_to_file=args.write_smiles_to_file, r_group_expansions=args.r_group_expansions, record_equiv_synthon=args.record_equiv_synthon)
+                   write_smiles_to_file=args.write_smiles_to_file, r_group_expansions=args.r_group_expansions, record_equiv_synthon=args.record_equiv_synthon,
+                   calc_ifps=calc_ifps)
 
 
 if __name__ == "__main__":
